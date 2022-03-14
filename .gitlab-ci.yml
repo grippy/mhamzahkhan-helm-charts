@@ -1,6 +1,6 @@
 ---
 variables:
-  HELM_VERSION: 3.5.1
+  HELM_VERSION: 3.8.1
   HELM_EXPERIMENTAL_OCI: 1
 
 stages:
