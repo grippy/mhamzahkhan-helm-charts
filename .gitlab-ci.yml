@@ -52,5 +52,5 @@ release-helm:
   script:
     - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
         helm chart save $i $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA;
-        helm chart push $i $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA;
+        helm chart push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA;
       done
