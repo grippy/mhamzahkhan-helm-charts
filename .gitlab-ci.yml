@@ -51,6 +51,6 @@ release-helm:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
-        helm chart save $i $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
-        helm chart push $i $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+        helm chart save $i $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG;
+        helm chart push $i $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG;
       done
