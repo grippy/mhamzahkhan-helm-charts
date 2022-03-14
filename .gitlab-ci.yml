@@ -23,8 +23,6 @@ helm lint:
   image:
     name: alpine/helm:$HELM_VERSION
     entrypoint: ["/bin/sh", "-c"]
-  before_script:
-    - helm init --client-only
   script:
     - helm lint charts/*
 
@@ -33,8 +31,6 @@ Package Charts:
   image:
     name: alpine/helm:$HELM_VERSION
     entrypoint: ["/bin/sh", "-c"]
-  before_script:
-    - helm init --client-only
   script:
     - mkdir -p ./publish
     - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
