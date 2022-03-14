@@ -1,0 +1,60 @@
+---
+variables:
+  HELM_VERSION: 3.5.1
+  HELM_EXPERIMENTAL_OCI: 1
+
+stages:
+  - linters
+  - build
+  - publish
+
+yamllint:
+  stage: linters
+  image:
+    name: cytopia/yamllint
+    entrypoint: ["/bin/ash", "-c"]
+  before_script:
+    - yamllint --version
+  script:
+    - yamllint --strict -f colored .
+
+helm lint:
+  stage: linters
+  image:
+    name: alpine/helm:$HELM_VERSION
+    entrypoint: ["/bin/sh", "-c"]
+  before_script:
+    - helm init --client-only
+  script:
+    - helm lint charts/*
+
+Package Charts:
+  stage: build
+  image:
+    name: alpine/helm:$HELM_VERSION
+    entrypoint: ["/bin/sh", "-c"]
+  before_script:
+    - helm init --client-only
+  script:
+    - mkdir -p ./publish
+    - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
+        helm dependency update $i;
+        helm dependency build $i;
+        helm package $i --destination ./publish;
+      done
+  artifacts:
+    paths:
+      - publish
+
+release-helm:
+  stage: build
+  image:
+    name: alpine/helm:$HELM_VERSION
+    entrypoint: ["/bin/sh", "-c"]
+  before_script:
+    - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
+        helm chart save $i $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+        helm chart push $i $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+      done
