@@ -56,5 +56,5 @@ helm publish:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - set -x && for i in $(find publish/* -type f -name '*.tgz'); do
-        helm push $i $CI_REGISTRY_IMAGE
+        helm push $i $CI_REGISTRY_IMAGE;
       donee
