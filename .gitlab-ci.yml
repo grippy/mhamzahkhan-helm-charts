@@ -26,11 +26,14 @@ helm lint:
   script:
     - helm lint charts/*
 
-Package Charts:
+helm package:
   stage: build
   image:
     name: alpine/helm:$HELM_VERSION
     entrypoint: ["/bin/sh", "-c"]
+  before_script:
+    - helm repo add argo https://argoproj.github.io/argo-helm
+    - helm repo update
   script:
     - mkdir -p ./publish
     - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
@@ -42,15 +45,16 @@ Package Charts:
     paths:
       - publish
 
-release-helm:
-  stage: build
+helm publish:
+  stage: publish
+  variables:
+    GIT_STRATEGY: none
   image:
     name: alpine/helm:$HELM_VERSION
     entrypoint: ["/bin/sh", "-c"]
   before_script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - set -x && for i in $(find charts/* -maxdepth 0 -type d); do
-        helm chart save $i $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA;
-        helm chart push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA;
-      done
+    - set -x && for i in $(find publish/* -type f -name '*.tgz'); do
+        helm push $i $CI_REGISTRY_IMAGE
+      donee
