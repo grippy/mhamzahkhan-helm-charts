@@ -11,7 +11,7 @@ stages:
 yamllint:
   stage: linters
   image:
-    name: cytopia/yamllint
+    name: docker.io/cytopia/yamllint
     entrypoint: ["/bin/ash", "-c"]
   before_script:
     - yamllint --version
@@ -21,7 +21,7 @@ yamllint:
 helm lint:
   stage: linters
   image:
-    name: alpine/helm:$HELM_VERSION
+    name: docker.io/alpine/helm:$HELM_VERSION
     entrypoint: ["/bin/sh", "-c"]
   script:
     - helm lint charts/*
@@ -29,7 +29,7 @@ helm lint:
 helm package:
   stage: build
   image:
-    name: alpine/helm:$HELM_VERSION
+    name: docker.io/alpine/helm:$HELM_VERSION
     entrypoint: ["/bin/sh", "-c"]
   before_script:
     - helm repo add argo https://argoproj.github.io/argo-helm
@@ -50,7 +50,7 @@ helm publish:
   variables:
     GIT_STRATEGY: none
   image:
-    name: curlimages/curl:latest
+    name: docker.io/curlimages/curl:latest
     entrypoint: ["/bin/sh", "-c"]
   script:
     - set -x && for i in $(find publish/* -type f -name '*.tgz'); do
