@@ -8,15 +8,15 @@ stages:
   - build
   - publish
 
-yamllint:
-  stage: linters
-  image:
-    name: docker.io/cytopia/yamllint
-    entrypoint: ["/bin/ash", "-c"]
-  before_script:
-    - yamllint --version
-  script:
-    - yamllint --strict -f colored .
+# yamllint:
+#   stage: linters
+#   image:
+#     name: docker.io/cytopia/yamllint
+#     entrypoint: ["/bin/ash", "-c"]
+#   before_script:
+#     - yamllint --version
+#   script:
+#     - yamllint --strict -f colored .
 
 helm lint:
   stage: linters
