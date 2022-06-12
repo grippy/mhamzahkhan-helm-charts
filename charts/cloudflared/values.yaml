@@ -1,0 +1,49 @@
+---
+# Change this to use a different image
+image:
+  repository: "docker.io/cloudflare/cloudflared"
+  # tag: "2022.4.0" # Defaults to appVersion
+  pullPolicy: "IfNotPresent"
+
+# Can be a deployment or daemonset
+kind: "daemonset"
+
+# If using a deployment, define number of replicas
+replicaCount: 1
+
+# Define node selector
+nodeSelector: {}
+
+# Define tolerations
+tolerations: {}
+
+# Define affinity
+affinity: {}
+
+# Define topology spread constraints
+topologySpreadConstraints: {}
+
+# Define resource limitations
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+# Define roll out strategy
+strategy:
+  type: RollingUpdate
+
+### Argo Tunnel ID
+tunnelID: ""
+
+auth:
+  accountTag: ""
+  tunnelName: ""
+  tunnelSecret: ""
+
+### Set up custom ingress rules here
+ingress:
+  - service: http_status:404

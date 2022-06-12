@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: cloudflared
+version: 1.0.0
+description: "Cloudflare Tunnel client"
+home: https://github.com/cloudflare/cloudflared
+maintainers:
+  - name: M. Hamzah Khan
+    email: hamzah@hamzahkhan.com
+    url: https://blog.hamzahkhan.com/
+icon: https://blog.cloudflare.com/content/images/2016/09/cf-blog-logo-crop.png
+appVersion: "2022.5.3"
