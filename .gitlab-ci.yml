@@ -45,7 +45,7 @@ helm package:
     paths:
       - publish
 
-helm publish:
+helm publish to gitlab internal:
   stage: publish
   variables:
     GIT_STRATEGY: none
@@ -55,4 +55,16 @@ helm publish:
   script:
     - set -x && for i in $(find publish/* -type f -name '*.tgz'); do
         curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@$i" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts";
+      done
+
+helm publish to chartmuseum:
+  stage: publish
+  variables:
+    GIT_STRATEGY: none
+  image:
+    name: docker.io/curlimages/curl:latest
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - set -x && for i in $(find publish/* -type f -name '*.tgz'); do
+        curl --user $CHARTMUSEUM_USERNAME:$CHARTMUSEUM_PASSWORD --data-binary "@$i" "${CHARTMUSEUM_URL}/api/charts";
       done
