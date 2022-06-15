@@ -13,9 +13,8 @@
   "assignees": [
     "mhamzahkhan"
   ],
+  "bumpVersion": "patch",
   "helmv3": {
-    "fileMatch": [
-      "^Chart.yaml$"
-    ]
+    "fileMatch": ["charts/.+/Chart\\.yaml$"]
   }
 }
