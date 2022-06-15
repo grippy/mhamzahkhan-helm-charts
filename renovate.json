@@ -12,5 +12,10 @@
   "assignAutomerge": true,
   "assignees": [
     "mhamzahkhan"
-  ]
+  ],
+  "helmv3": {
+    "fileMatch": [
+      "^Chart.yaml$"
+    ]
+  }
 }
