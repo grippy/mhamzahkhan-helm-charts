@@ -23,6 +23,8 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "2000"
+        checksum/secrets: {{ include (print $.Template.BasePath "/tunnel-secret.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: cloudflared
