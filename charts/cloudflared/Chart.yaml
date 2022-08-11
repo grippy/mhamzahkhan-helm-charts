@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 name: cloudflared
-version: 1.0.6
+version: 1.0.7
 description: "Cloudflare Tunnel client"
 home: https://github.com/cloudflare/cloudflared
 maintainers:
@@ -9,4 +9,4 @@ maintainers:
     email: hamzah@hamzahkhan.com
     url: https://blog.hamzahkhan.com/
 icon: https://blog.cloudflare.com/content/images/2016/09/cf-blog-logo-crop.png
-appVersion: "2022.7.1"
+appVersion: "2022.8.0"
