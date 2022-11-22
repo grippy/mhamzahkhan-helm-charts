@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "activityrelay.fullname" . }}-worker
+  labels:
+    {{- include "activityrelay.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.activityrelay.workers.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "activityrelay.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      annotations:
+        {{- with (default .Values.podAnnotations .Values.activityrelay.workers.podAnnotations) }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "activityrelay.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "activityrelay.serviceAccountName" . }}
+      {{- with (default .Values.podSecurityContext .Values.activityrelay.workers.podSecurityContext) }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-worker
+          {{- with (default .Values.securityContext .Values.activityrelay.workers.securityContext) }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/usr/bin/relay" ]
+          args:
+            - worker
+          {{- with .Values.activityrelay.workers.extraArgs }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "activityrelay.fullname" . }}-config
+          {{- with .Values.activityrelay.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: actor-key
+              mountPath: /var/lib/relay
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        {{- if .Values.activityrelay.actor.existingSecret }}
+        - name: actor-key
+          secret:
+            secretName: {{ .Values.activityrelay.actor.existingSecret }}
+        {{- else }}
+        - name: actor-key
+          secret:
+            secretName: {{ include "activityrelay.fullname" . }}-actor-key
+        {{- end }}
+        - name: tmp
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.affinity .Values.activityrelay.workers.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podDnsPolicy }}
+      dnsPolicy: {{ . }}
+      {{- end }}
+      {{- with .Values.podDnsConfig }}
+      dnsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

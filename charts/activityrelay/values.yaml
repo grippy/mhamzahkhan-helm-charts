@@ -1,0 +1,111 @@
+---
+image:
+  repository: docker.io/yukimochi/activity-relay
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+service:
+  type: ClusterIP
+
+activityrelay:
+  config:
+    relay_domain: "relay.example.com"
+    relay_servicename: "Example ActivityPub Relay Service"
+    job_concurrency: "50"
+
+  actor:
+    existingSecret: ""
+
+  server:
+    replicaCount: 1
+    port: 8080
+    extraArgs:
+      - "--verbose"
+    podAnnotations: {}
+    podSecurityContext: {}
+    securityContext:
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+        add:
+          - NET_BIND_SERVICE
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                  app.kubernetes.io/component: workers
+            topologyKey: kubernetes.io/hostname
+    resources: {}
+
+  workers:
+    replicaCount: 3
+    extraArgs:
+      - "--verbose"
+    podAnnotations: {}
+    podSecurityContext: {}
+    securityContext:
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                  app.kubernetes.io/component: workers
+            topologyKey: kubernetes.io/hostname
+    resources: {}
+
+redis:
+  enabled: true
+
+  architecture: "standalone"
+
+  auth:
+    enabled: false
+
+  externalRedis:
+    host: localhost
+    port: 6379
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsUser: 991
+  runAsGroup: 991
+  fsGroup: 991
+  runAsNonRoot: true
+
+securityContext: {}
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+tolerations: []
+
+affinity: {}
+
+# podDnsPolicy: "None"
+# podDnsConfig:
+#   options:
+#     - name: ndots
+#       value: "1"

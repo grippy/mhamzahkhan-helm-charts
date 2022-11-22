@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "activityrelay.fullname" . }}-server
+  labels:
+    {{- include "activityrelay.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.activityrelay.server.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "activityrelay.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      annotations:
+        {{- with (default .Values.podAnnotations .Values.activityrelay.server.podAnnotations) }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "activityrelay.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: server
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "activityrelay.serviceAccountName" . }}
+      {{- with (default .Values.podSecurityContext .Values.activityrelay.server.podSecurityContext) }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-server
+          {{- with (default .Values.securityContext .Values.activityrelay.server.securityContext) }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/usr/bin/relay" ]
+          args:
+            - server
+          {{- with .Values.activityrelay.server.extraArgs }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "activityrelay.fullname" . }}-config
+          ports:
+            - name: http
+              containerPort: {{ .Values.activityrelay.server.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /nodeinfo/2.1
+              port: {{ .Values.activityrelay.server.port }}
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /nodeinfo/2.1
+              port: {{ .Values.activityrelay.server.port }}
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 1
+          {{- with .Values.activityrelay.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: actor-key
+              mountPath: /var/lib/relay
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        {{- if .Values.activityrelay.actor.existingSecret }}
+        - name: actor-key
+          secret:
+            secretName: {{ .Values.activityrelay.actor.existingSecret }}
+        {{- else }}
+        - name: actor-key
+          secret:
+            secretName: {{ include "activityrelay.fullname" . }}-actor-key
+        {{- end }}
+        - name: tmp
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (default .Values.affinity .Values.activityrelay.server.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podDnsPolicy }}
+      dnsPolicy: {{ . }}
+      {{- end }}
+      {{- with .Values.podDnsConfig }}
+      dnsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
