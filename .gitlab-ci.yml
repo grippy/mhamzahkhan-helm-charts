@@ -33,6 +33,7 @@ helm package:
     entrypoint: ["/bin/sh", "-c"]
   before_script:
     - helm repo add argo https://argoproj.github.io/argo-helm
+    - helm repo add bitnami https://charts.bitnami.com/bitnami
     - helm repo update
   script:
     - mkdir -p ./publish
