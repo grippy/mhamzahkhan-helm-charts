@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 name: cloudflared
-version: 1.0.9
+version: 1.0.10
 description: "Cloudflare Tunnel client"
 home: https://github.com/cloudflare/cloudflared
 maintainers:
