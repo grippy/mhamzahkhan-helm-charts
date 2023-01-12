@@ -36,6 +36,10 @@ resources: {}
 strategy:
   type: RollingUpdate
 
+disruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
 ### Argo Tunnel ID
 tunnelID: ""
 

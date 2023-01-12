@@ -24,6 +24,8 @@ $ helm install cloudflared mhamzahkhan/cloudflared
 | `topologySpreadConstraints` | Define topology spread constraints | `{}` |
 | `resources` | Define pod resource requests/limits | `{}` |
 | `strategy.type` | Define roll out strategy | `RollingUpdate` |
+| `disruptionBudget.enabled` | Enable PodDisruptionBudget | `true` |
+| `disruptionBudget.maxUnavailable` | Maximum unavailable pods | 1 |
 | `tunnelID` | Argo Tunnel ID | `""` |
 | `auth.accountTag` | Argo Tunnel Account Tag | `""` |
 | `auth.tunnelName` | Argo Tunnel Tunnel Name | `""` |
