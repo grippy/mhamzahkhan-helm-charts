@@ -1,14 +1,14 @@
 ---
 apiVersion: v2
 name: activityrelay
-version: 1.0.5
+version: 1.0.6
 description: "Yet another powerful customizable ActivityPub relay server written in Go."
 home: https://github.com/yukimochi/Activity-Relay
 maintainers:
   - name: M. Hamzah Khan
     email: hamzah@hamzahkhan.com
     url: https://blog.hamzahkhan.com/
-appVersion: "v1.2.4"
+appVersion: "v1.2.5"
 
 dependencies:
   - name: redis
