@@ -2,7 +2,7 @@
 # Change this to use a different image
 image:
   repository: "docker.io/cloudflare/cloudflared"
-  tag: "2022.12.1"
+  tag: "2023.1.0"
   pullPolicy: "IfNotPresent"
 
 # Can be a deployment or daemonset
