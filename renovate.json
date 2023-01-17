@@ -6,17 +6,48 @@
     ":prHourlyLimitNone",
     "regexManagers:dockerfileVersions"
   ],
-  "prConcurrentLimit": 5,
-  "automerge": true,
-  "platformAutomerge": true,
+  "prConcurrentLimit": 20,
+  "semanticCommits": "enabled",
   "assignAutomerge": true,
   "assignees": [
     "mhamzahkhan"
   ],
+  "automerge": true,
+  "automergeType": "pr",
+  "platformAutomerge": true,
   "bumpVersion": "patch",
   "helmv3": {
     "fileMatch": [
-      "charts/.+/Chart.yaml$"
+      "charts/.+/Chart\\.yaml$",
+      "(^|/)Chart\\.yaml$"
     ]
-  }
+  },
+  "gitlabci": {
+    "fileMatch": [
+      "\\.gitlab-ci\\.yml$",
+      "gitlab-ci\\.yaml$"
+    ]
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "\\.yaml$"
+      ],
+      "matchStrings": [
+        "# renovate:\\n\\s+image: \"?'?(?<depName>[^:\\s]+?):(?<currentValue>[^\"]*?)\"?'?\\s"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "Chart\\.yaml$"
+      ],
+      "matchStrings": [
+        "# renovate:\\s+image=(?<depName>[^:\\s]+?)\\nappVersion:\\s+\"?'?(?<currentValue>[^\"]*)\"?'?"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ]
 }

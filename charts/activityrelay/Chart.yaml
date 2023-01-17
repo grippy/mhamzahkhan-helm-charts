@@ -8,6 +8,7 @@ maintainers:
   - name: M. Hamzah Khan
     email: hamzah@hamzahkhan.com
     url: https://blog.hamzahkhan.com/
+# renovate: image=docker.io/yukimochi/activity-relay
 appVersion: "v1.2.5"
 
 dependencies:
