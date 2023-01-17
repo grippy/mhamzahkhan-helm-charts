@@ -15,7 +15,6 @@
   "automerge": true,
   "automergeType": "pr",
   "platformAutomerge": true,
-  "bumpVersion": "patch",
   "helmv3": {
     "fileMatch": [
       "charts/.+/Chart\\.yaml$",
@@ -28,6 +27,7 @@
       "gitlab-ci\\.yaml$"
     ]
   },
+  "separateMinorPatch": true,
   "regexManagers": [
     {
       "fileMatch": [
@@ -48,6 +48,24 @@
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": true
+    },
+    {
+      "description": "Bump helm chart versions",
+      "matchManagers": [
+        "helmv3"
+      ],
+      "bumpVersion": "patch"
     }
   ]
 }
