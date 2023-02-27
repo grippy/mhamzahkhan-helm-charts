@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 name: cloudflared
-version: "1.0.15"
+version: "1.0.16"
 description: "Cloudflare Tunnel client"
 home: https://github.com/cloudflare/cloudflared
 maintainers:
@@ -10,4 +10,4 @@ maintainers:
     url: https://blog.hamzahkhan.com/
 icon: https://blog.cloudflare.com/content/images/2016/09/cf-blog-logo-crop.png
 # renovate: image=docker.io/cloudflare/cloudflared
-appVersion: "2023.2.1"
+appVersion: "2023.2.2"
