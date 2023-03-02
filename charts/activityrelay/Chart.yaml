@@ -9,7 +9,7 @@ maintainers:
     email: hamzah@hamzahkhan.com
     url: https://blog.hamzahkhan.com/
 # renovate: image=docker.io/yukimochi/activity-relay
-appVersion: "v2.0.0beta2"
+appVersion: "v2.0.0"
 
 dependencies:
   - name: redis
