@@ -1,0 +1,100 @@
+---
+image:
+  repository: lscr.io/linuxserver/unifi-controller
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+service:
+  annotations: {}
+  type: ClusterIP
+
+  clusterIP: ""
+  loadBalancerIP: ""
+
+  externalTrafficPolicy: Cluster
+
+environment:
+  timezone: "Europe/London"
+  uid: 1000
+  gid: 1000
+  memLimit: 1920
+  memStartup: 1024
+
+resources: {}
+
+probes:
+  startup:
+    enabled: true
+    probe:
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 30
+      httpGet:
+        path: /status
+        port: https
+        scheme: HTTPS
+
+  liveness:
+    enabled: true
+    probe:
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 6
+      httpGet:
+        path: /status
+        port: https
+        scheme: HTTPS
+
+  readiness:
+    enabled: true
+    probe:
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+      httpGet:
+        path: /status
+        port: https
+        scheme: HTTPS
+
+podAnnotations: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+affinity: {}
+
+tolerations: []
+
+# podDnsPolicy: "None"
+# podDnsConfig:
+#   options:
+#     - name: ndots
+#       value: "1"
+
+persistence:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
