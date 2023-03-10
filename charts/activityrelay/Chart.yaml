@@ -22,13 +22,13 @@ appVersion: "v2.0.0"
 annotations:
   artifacthub.io/images: |
     - name: activity-relay
-      image: yukimochi/activity-relay
+      image: docker.io/yukimochi/activity-relay
       platforms:
         - linux/amd64
         - linux/arm64
 
 dependencies:
   - name: redis
-    version: 17.8.4
+    version: 17.8.*
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
