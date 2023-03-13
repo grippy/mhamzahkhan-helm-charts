@@ -10,4 +10,4 @@ maintainers:
     url: https://blog.hamzahkhan.com/
 icon: https://blog.cloudflare.com/content/images/2016/09/cf-blog-logo-crop.png
 # renovate: image=docker.io/cloudflare/cloudflared
-appVersion: "2023.3.0"
+appVersion: "2023.3.1"
