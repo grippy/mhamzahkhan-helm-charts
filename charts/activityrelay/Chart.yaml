@@ -17,7 +17,7 @@ maintainers:
     email: hamzah@hamzahkhan.com
     url: https://blog.hamzahkhan.com/
 # renovate: image=docker.io/yukimochi/activity-relay
-appVersion: "v2.0.0"
+appVersion: "v2.0.1"
 
 annotations:
   artifacthub.io/images: |
