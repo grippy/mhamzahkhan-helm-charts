@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 name: activityrelay
-version: 1.0.21
+version: 1.0.22
 description: "Yet another powerful customizable ActivityPub relay server written in Go."
 home: https://github.com/yukimochi/Activity-Relay
 type: application
@@ -17,12 +17,12 @@ maintainers:
     email: hamzah@hamzahkhan.com
     url: https://blog.hamzahkhan.com/
 # renovate: image=docker.io/yukimochi/activity-relay
-appVersion: "v2.0.1"
+appVersion: "v2.0.2"
 
 annotations:
   artifacthub.io/images: |
     - name: activity-relay
-      image: docker.io/yukimochi/activity-relay
+      image: yukimochi/activity-relay
       platforms:
         - linux/amd64
         - linux/arm64
